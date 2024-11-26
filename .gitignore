@@ -41,3 +41,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase
+/firebase.json
+/firebase.indexes.json
+/firebase.rules
+/storage.rules
+/firebaserc
+
+# others
+/todo.md
