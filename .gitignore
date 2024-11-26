@@ -43,11 +43,11 @@ app.*.map.json
 /android/app/release
 
 # Firebase
-/firebase.json
-/firebase.indexes.json
-/firebase.rules
-/storage.rules
-/firebaserc
+firebase.json
+firebase.indexes.json
+firebase.rules
+storage.rules
+firebaserc
 
 # others
-/todo.md
+todo.md
