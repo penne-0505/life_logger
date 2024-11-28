@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:life_logger/models/calendar_info/day_info.dart';
 import 'package:life_logger/models/calendar_info/weather.dart';
@@ -101,7 +102,7 @@ class _DayGridState extends State<DayGrid> {
         CommonInfoGrid(
           height: widget.height ?? 200,
           width: widget.width ?? 200,
-          child: Text('日付: ${widget.dayInfo.date}'),
+          child: Text('${widget.dayInfo.date.month}/${widget.dayInfo.date.day}'),
         )
       ],
     );
@@ -126,40 +127,76 @@ class CommonInfoGrid extends StatelessWidget {
         height: height ?? 200,
         width: width ?? 200,
         child: child,
+        padding: const EdgeInsets.all(16),
       ),
     );
   }
 }
 
-class WeekGrid extends StatelessWidget {
+class WeekGrid extends StatefulWidget {
+
+  const WeekGrid({super.key});
+
+  @override
+  State<WeekGrid> createState() => _WeekGridState();
+}
+
+class _WeekGridState extends State<WeekGrid> {
+  final ScrollController _scrollController = ScrollController();
   final List<DayInfo> dayInfos = [tempDayInfo];
 
-  WeekGrid({super.key});
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-  Map<String, int> getResponsiveWidth(BuildContext context) {
+  Map<String, double> calcResponsiveWidth(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final double height = MediaQuery.of(context).size.height;
-    // 横幅
+
+    // 幅をWとする場合、要素の幅はW ÷ 7.25、スペーシングの幅はW ÷ 145 (だいたい20:1)
+    final double cardWidth = width / 7.25;
+    final double spacingWidth = width / 145;
+
+    return {
+      'cardWidth': cardWidth,
+      'spacingWidth': spacingWidth,
+      'cardHeight': cardWidth * 0.6,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      scrollDirection: Axis.horizontal,
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return DayGrid(
-                dayInfo: dayInfos[0],
-                height: getResponsiveWidth(context)['height'] as double,
-                width: getResponsiveWidth(context)['width'] as double,
-              );
-            },
-            childCount: 7,
+    Map<String, double> responsiveWidth = calcResponsiveWidth(context); 
+    double dateCardHeight = responsiveWidth['cardWidth']! * 0.38;
+    double dateCardWidth = responsiveWidth['cardWidth']!;
+    double cardSpacingWidth = responsiveWidth['spacingWidth']!;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: CustomScrollView(
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        // 通常のスクロール動作を許可
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              // builder
+              (context, index) {
+                return Padding(
+                  padding: EdgeInsets.only(right: cardSpacingWidth),
+                  child: DayGrid(
+                    dayInfo: dayInfos[0],
+                    height: dateCardHeight,
+                    width: dateCardWidth,
+                  ),
+                );
+              },
+              childCount: 7,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

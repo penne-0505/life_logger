@@ -46,10 +46,13 @@ class WeekViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         // child: WeekGrid(dayInfos: [tempDayInfo])
-        child: WeekGrid()
+        child: Padding(
+          padding: EdgeInsets.only(top: 12.0),
+          child: WeekGrid(),
+        )
       ),
     );
   }
