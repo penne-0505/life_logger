@@ -60,14 +60,14 @@ class WeekViewPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xfff9f9ff),
               borderRadius: BorderRadius.circular(100),
-              boxShadow: [
-                const BoxShadow(
+              boxShadow: const [
+                BoxShadow(
                   color: Color(0x7fa0c4ff),
                   spreadRadius: 5,
                   blurRadius: 7,
                   offset: Offset(3, 3),
                 ),
-                const BoxShadow(
+                BoxShadow(
                   color: Color(0xffffffff),
                   spreadRadius: 4,
                   blurRadius: 6,
