@@ -97,24 +97,56 @@ class DayGrid extends StatefulWidget {
 class _DayGridState extends State<DayGrid> {
   @override
   Widget build(BuildContext context) {
+    final DateTime date = widget.dayInfo.date;
     return Column(
       children: [
-        CommonInfoGrid(
+        CommonInfoCard(
           height: widget.height ?? 200,
           width: widget.width ?? 200,
-          child: Text('${widget.dayInfo.date.month}/${widget.dayInfo.date.day}'),
+          child: DateCard(date: date, weekday: widget.dayInfo.weekday),
         )
       ],
     );
   }
 }
 
-class CommonInfoGrid extends StatelessWidget {
+class DateCard extends CommonInfoCard {
+  final DateTime date;
+  final int weekday;
+
+  DateCard({
+    super.key,
+    required this.date,
+    required this.weekday,
+    super.height,
+    super.width,
+  }) : super(
+    child: Column(
+      children: [
+        Text(
+          '${date.month}/${date.day}',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: SpecifyColors.black
+          ),
+        ),
+        Text(
+          '($weekday)',
+          style: const TextStyle(
+            color: SpecifyColors.tickGrey,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class CommonInfoCard extends StatelessWidget {
   final Widget child;
   final double? height;
   final double? width;
 
-  const CommonInfoGrid({super.key, required this.child, this.height, this.width});
+  const CommonInfoCard({super.key, required this.child, this.height, this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +159,7 @@ class CommonInfoGrid extends StatelessWidget {
         height: height ?? 200,
         width: width ?? 200,
         child: child,
-        padding: const EdgeInsets.all(16),
+        // padding: const EdgeInsets.all(16),
       ),
     );
   }
