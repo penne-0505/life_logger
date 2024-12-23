@@ -1,3 +1,3 @@
 # life_logger
 
-A new Flutter project.
+this is workin' on it
